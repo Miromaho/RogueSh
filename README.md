@@ -1,2 +1,2 @@
 # RogueSh
-Classic turn-based roguelike
+IN-PROGRESS
