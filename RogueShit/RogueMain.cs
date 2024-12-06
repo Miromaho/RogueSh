@@ -39,18 +39,19 @@ namespace RogueMain
         public static CommandSys CommandSys { get; set; }
         public static IRandom Random { get; set; }
         public static MessLogs MessLogs { get; set; }
+        public static SchedulingSystem SchedulingSystem { get; set; }
         public static void Main()
         {
 
             string fontFileName = "ASCII8x8.png";
+
+            SchedulingSystem = new SchedulingSystem();
 
             int seed = (int)DateTime.UtcNow.Ticks;
             Random = new DotNetRandom(seed);
 
             string consoleTitle = $"RougeShit - Level 1 - seed {seed}";
             rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
-
-            CommandSys = new CommandSys();
 
             MapGenerator mapGenerator = new MapGenerator( mapWidth, mapHeight, 12, 15, 6);
             DungeonMap = mapGenerator.CreateMap();
@@ -66,6 +67,8 @@ namespace RogueMain
             statConsole = new RLConsole(statWidth, statHeight);
             inventoryConsole = new RLConsole(inventoryWidth, inventoryHeight);
 
+            CommandSys = new CommandSys();
+
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
@@ -78,32 +81,41 @@ namespace RogueMain
             // Передвижение персонажа
             bool didPlayerAct = false;
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
-            if (keyPress != null)
+            if (CommandSys.IsPlayerTurn)
             {
-                if (keyPress.Key == RLKey.Up)
+                if (keyPress != null)
                 {
-                    didPlayerAct = CommandSys.PlayersMove(Direction.Up);
-                }
-                else if (keyPress.Key == RLKey.Down)
-                {
-                    didPlayerAct = CommandSys.PlayersMove(Direction.Down);
-                }
-                else if (keyPress.Key == RLKey.Left)
-                {
-                    didPlayerAct = CommandSys.PlayersMove(Direction.Left);
-                }
-                else if (keyPress.Key == RLKey.Right)
-                {
-                    didPlayerAct = CommandSys.PlayersMove(Direction.Right);
-                }
-                else if (keyPress.Key == RLKey.Escape)
-                {
-                    rootConsole.Close();
+                    if (keyPress.Key == RLKey.Up)
+                    {
+                        didPlayerAct = CommandSys.PlayersMove(Direction.Up);
+                    }
+                    else if (keyPress.Key == RLKey.Down)
+                    {
+                        didPlayerAct = CommandSys.PlayersMove(Direction.Down);
+                    }
+                    else if (keyPress.Key == RLKey.Left)
+                    {
+                        didPlayerAct = CommandSys.PlayersMove(Direction.Left);
+                    }
+                    else if (keyPress.Key == RLKey.Right)
+                    {
+                        didPlayerAct = CommandSys.PlayersMove(Direction.Right);
+                    }
+                    else if (keyPress.Key == RLKey.Escape)
+                    {
+                        rootConsole.Close();
+                    }
                 }
             }
-
+            
             if (didPlayerAct)
             {
+                renderRequired = true;
+                CommandSys.EndPlayerTurn();
+            }
+            else
+            {
+                CommandSys.ActivateMonsters();
                 renderRequired = true;
             }
             // Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
@@ -126,9 +138,11 @@ namespace RogueMain
         {
             if (renderRequired)
             {
-                rootConsole.Draw();
+                mapConsole.Clear();
+                statConsole.Clear();
+                messageConsole.Clear();
 
-                DungeonMap.Draw(mapConsole);
+                DungeonMap.Draw(mapConsole, statConsole);
 
                 Player.Draw(mapConsole, DungeonMap);
 
@@ -140,6 +154,8 @@ namespace RogueMain
                 RLConsole.Blit(statConsole, 0, 0, statWidth, statHeight, rootConsole, mapWidth, 0);
                 RLConsole.Blit(messageConsole, 0, 0, messageWidth, messageHeight, rootConsole, 0, screenHeight - messageHeight);
                 RLConsole.Blit(inventoryConsole, 0, 0, inventoryWidth, inventoryHeight, rootConsole, 0, 0);
+
+                rootConsole.Draw();
 
                 renderRequired = false;
             }

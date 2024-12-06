@@ -20,5 +20,11 @@ namespace RogueMain.Core
         public static RLColor Player = Palette.DbLight;
 
         public static RLColor Gold = Palette.DbGold;
+        public static RLColor Goblin = Palette.DbGoblin;
+
+        public static RLColor DoorBackground = Palette.ComplimentDarkest;
+        public static RLColor Door = Palette.ComplimentLighter;
+        public static RLColor DoorBackgroundFov = Palette.ComplimentDarker;
+        public static RLColor DoorFov = Palette.ComplimentLightest;
     }
 }

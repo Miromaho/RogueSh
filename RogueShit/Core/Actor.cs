@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RogueShit.Core
 {
-    public class Actor : IActor, IDrawable
+    public class Actor : IActor, IDrawable, IScheduleable
     {
         //IActor переменные
         private int _attack;
@@ -80,8 +80,14 @@ namespace RogueShit.Core
        public char Symbol { get; set; }
        public int X { get; set; }
        public int Y { get; set; }
-       public void Draw(RLConsole console, IMap map)
+
+        //IScheduleable
+        public int Time
         {
+            get { return Speed; }
+        }
+       public void Draw(RLConsole console, IMap map)
+       {
             if (!map.GetCell(X, Y).IsExplored)
             {
                 return;
@@ -95,7 +101,7 @@ namespace RogueShit.Core
             {
                 console.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
             }
-        }
+       }
     }
 }
 

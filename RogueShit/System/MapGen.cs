@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using RLNET;
 using RogueMain;
 using RogueSharp;
+using RogueSharp.DiceNotation;
 using RogueShit.Core;
+using RogueShit.Enemies;
 
 public class MapGenerator
 {
@@ -27,6 +29,29 @@ public class MapGenerator
         roomMinSize = RoomMinSize;
         map = new DungeonMap();
     }
+
+    private void PlaceEnemies()
+    {
+        foreach (var room in map.Rooms)
+        {
+            if (Dice.Roll("1D10") < 8)
+            {
+                var numberOfEnemies = Dice.Roll("1D4");
+                for (int i = 0; i < numberOfEnemies; i++)
+                {
+                   Point randomRoomLocation = map.GetRandomWalkableLocationInRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        var enemy = Goblin.Create(1);
+                        enemy.X = randomRoomLocation.X;
+                        enemy.Y = randomRoomLocation.Y;
+                        map.AddEnemy(enemy);
+                    }
+                }
+            }
+        }
+    }
+
 
     public DungeonMap CreateMap()
     {
@@ -71,6 +96,7 @@ public class MapGenerator
             }
         }
         PlacePlayer();
+        PlaceEnemies();
         return map;
     }
     private void PlacePlayer()

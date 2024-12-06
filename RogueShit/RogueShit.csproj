@@ -8,9 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GoRogue" Version="2.6.4" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="4.6.0-preview.19073.11" />
     <PackageReference Include="RLNET" Version="1.0.6" />
     <PackageReference Include="RogueSharp" Version="4.2.0" />
+    <PackageReference Include="SadConsole" Version="10.4.2" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.2" />
   </ItemGroup>
 

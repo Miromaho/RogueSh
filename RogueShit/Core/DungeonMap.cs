@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using RLNET;
 using RogueMain;
@@ -13,25 +14,51 @@ using RogueShit.Core;
 public class DungeonMap : Map
 {
     public List<Rectangle> Rooms;
-    public DungeonMap() 
+    private readonly List<Enemy> enemies;
+
+    public DungeonMap()
     {
         Rooms = new List<Rectangle>();
+        enemies = new List<Enemy>();
     }
     // Метод Draw будет вызываться каждый раз при обновлении карты
     // Он будет выводить все символы/цвета для каждой ячейки в консоль карты.
-    public void Draw(RLConsole mapConsole)
+    public void Draw(RLConsole mapConsole, RLConsole statConsole)
     {
         mapConsole.Clear();
         foreach (Cell cell in GetAllCells())
         {
             SetConsoleSymbolForCell(mapConsole, cell);
         }
+
+        int i = 0;
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.Draw(mapConsole, this);
+            if (IsInFov(enemy.X, enemy.Y))
+            {
+                enemy.DrawStats(statConsole, i);
+                i++;
+            }
+        }
     }
-    public void AddPlayer(Player player)
+
+    public void RemoveEnemy(Enemy enemy)
+    {
+        enemies.Remove(enemy);
+        SetIsWalkable(enemy.X, enemy.Y, true);
+        RogueGame.SchedulingSystem.Remove(enemy);
+    }
+    public Enemy GetEnemyAt(int x, int y)
+    {
+        return enemies.FirstOrDefault(e => e.X == x && e.Y == y);
+    }
+public void AddPlayer(Player player)
     {
         RogueGame.Player = player;
         SetIsWalkable(player.X, player.Y, false);
         UpdatePlayerFieldOfView();
+        RogueGame.SchedulingSystem.Add(player);
     }
     private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
     {
@@ -65,6 +92,43 @@ public class DungeonMap : Map
                 console.Set(cell.X, cell.Y, Colors.Wall, Colors.WallBackground, '#');
             }
         }
+    }
+    // Добавление врагов на карту
+    public void AddEnemy(Enemy enemy)
+    {
+        enemies.Add(enemy);
+        SetIsWalkable(enemy.X, enemy.Y, false);
+        RogueGame.SchedulingSystem.Add(enemy);
+    }
+    public Point GetRandomWalkableLocationInRoom(Rectangle room)
+    {
+        if (DoesRoomHaveWalkableSpace(room))
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                int x = RogueGame.Random.Next(1, room.Width - 2) + room.X;
+                int y = RogueGame.Random.Next(1, room.Height - 2) + room.Y;
+                if (IsWalkable(x, y))
+                {
+                    return new Point(x, y);
+                }
+            }
+        }
+        return Point.Zero;
+    }
+    public bool DoesRoomHaveWalkableSpace(Rectangle room)
+    {
+        for (int x = 1; x <= room.Width - 2; x++)
+        {
+            for (int y = 1; y <= room.Height - 2; y++)
+            {
+                if (IsWalkable(x + room.X, y + room.Y))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     public void UpdatePlayerFieldOfView()
     {
