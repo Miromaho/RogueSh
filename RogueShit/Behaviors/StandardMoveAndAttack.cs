@@ -4,17 +4,17 @@ using RogueShit.Core;
 using RogueShit.interfaces;
 using RogueShit.System;
 using System.Text;
+using System.Threading;
 
 namespace RogueShit.Behaviors
 {
     public class StandardMoveAndAttack : IBehavior
-    {
-        public bool Act(Enemy enemy, CommandSys commandSys)
+    { 
+        public bool Act(Enemy enemy, CommandSys commandSystem)
         {
             DungeonMap dungeonMap = RogueGame.DungeonMap;
             Player player = RogueGame.Player;
             FieldOfView monsterFov = new FieldOfView(dungeonMap);
-
             if (!enemy.TurnsAlerted.HasValue)
             {
                 monsterFov.ComputeFov(enemy.X, enemy.Y, enemy.Awareness, true);
@@ -24,7 +24,6 @@ namespace RogueShit.Behaviors
                     enemy.TurnsAlerted = 1;
                 }
             }
-
             if (enemy.TurnsAlerted.HasValue)
             {
                 dungeonMap.SetIsWalkable(enemy.X, enemy.Y, true);
@@ -35,13 +34,10 @@ namespace RogueShit.Behaviors
 
                 try
                 {
-                    path = pathFinder.ShortestPath(
-                       dungeonMap.GetCell(enemy.X, enemy.Y),
-                       dungeonMap.GetCell(player.X, player.Y));
+                    path = pathFinder.ShortestPath(dungeonMap.GetCell(enemy.X, enemy.Y), dungeonMap.GetCell(player.X, player.Y));
                 }
                 catch (PathNotFoundException)
                 {
-
                     RogueGame.MessLogs.AddLine($"{enemy.Name} waits for a turn");
                 }
 
@@ -52,11 +48,11 @@ namespace RogueShit.Behaviors
                 {
                     try
                     {
-                        commandSys.MoveEnemies(enemy, path.TryStepForward() );
+                        commandSystem.MoveEnemies(enemy, path.StepForward());
                     }
                     catch (NoMoreStepsException)
                     {
-                        RogueGame.MessLogs.AddLine($"{enemy.Name} growls in frustration");
+                        RogueGame.MessLogs.AddLine($"{enemy.Name} waits for a turn");
                     }
                 }
 
@@ -69,5 +65,5 @@ namespace RogueShit.Behaviors
             }
             return true;
         }
-    }
+    }   
 }

@@ -13,11 +13,6 @@ namespace RogueShit.Core
     public class Enemy : Actor
     {
         public int? TurnsAlerted {get; set;}
-        public virtual void PerformAction(CommandSys commandSystem)
-        {
-            var behavior = new StandardMoveAndAttack();
-            behavior.Act(this, commandSystem);
-        }
         public void DrawStats(RLConsole statConsole, int position)
         {
             int yPosition = 13 + (position * 2);
@@ -30,6 +25,11 @@ namespace RogueShit.Core
             statConsole.SetBackColor(3 + width, yPosition, remainingWidth, 1, Palette.PrimaryDarkest);
 
             statConsole.Print(2, yPosition, $": {Name}", Palette.DbLight);
+        }
+        public virtual void PerformAction(CommandSys commandSystem)
+        {
+            var behavior = new StandardMoveAndAttack();
+            behavior.Act(this, commandSystem);
         }
     }
 }

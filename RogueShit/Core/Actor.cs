@@ -81,11 +81,6 @@ namespace RogueShit.Core
        public int X { get; set; }
        public int Y { get; set; }
 
-        //IScheduleable
-        public int Time
-        {
-            get { return Speed; }
-        }
        public void Draw(RLConsole console, IMap map)
        {
             if (!map.GetCell(X, Y).IsExplored)
@@ -102,6 +97,11 @@ namespace RogueShit.Core
                 console.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
             }
        }
+        //IScheduleable
+        public int Time
+        {
+            get { return Speed; }
+        }
     }
 }
 

@@ -37,29 +37,31 @@ namespace RogueMain
 
         private static bool renderRequired = true;
         public static CommandSys CommandSys { get; set; }
-        public static IRandom Random { get; set; }
         public static MessLogs MessLogs { get; set; }
         public static SchedulingSystem SchedulingSystem { get; set; }
+
+        private static int mapLevel = 1;
+
+        public static IRandom Random { get; set; }
         public static void Main()
         {
+            int seed = (int)DateTime.UtcNow.Ticks;
+            Random = new DotNetRandom(seed);
 
             string fontFileName = "ASCII8x8.png";
 
             SchedulingSystem = new SchedulingSystem();
 
-            int seed = (int)DateTime.UtcNow.Ticks;
-            Random = new DotNetRandom(seed);
-
-            string consoleTitle = $"RougeShit - Level 1 - seed {seed}";
-            rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
-
-            MapGenerator mapGenerator = new MapGenerator( mapWidth, mapHeight, 12, 15, 6);
-            DungeonMap = mapGenerator.CreateMap();
+            string consoleTitle = $"RougeShit - Level {mapLevel} - seed {seed}";
 
             MessLogs = new MessLogs();
             MessLogs.AddLine("The Ivan arrives on level 1");
             MessLogs.AddLine($"Level seed: {seed}");
 
+            rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
+
+            MapGenerator mapGenerator = new MapGenerator( mapWidth, mapHeight, 12, 15, 6, mapLevel);
+            DungeonMap = mapGenerator.CreateMap();
             DungeonMap.UpdatePlayerFieldOfView();
 
             mapConsole = new RLConsole(mapWidth, mapHeight);
@@ -72,6 +74,10 @@ namespace RogueMain
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
+            
+            //Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
+            inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
+            inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
             rootConsole.Run();
         }
@@ -105,9 +111,21 @@ namespace RogueMain
                     {
                         rootConsole.Close();
                     }
+                    else if (keyPress.Key == RLKey.Insert)
+                    {
+                        if (DungeonMap.CanMoveDownToNextLevel())
+                        {
+                            MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight, 20, 13, 7, ++mapLevel);
+                            DungeonMap = mapGenerator.CreateMap();
+                            MessLogs = new MessLogs();
+                            CommandSys = new CommandSys();
+                            rootConsole.Title = $"RogueShit - Level {mapLevel}";
+                            didPlayerAct = true;
+                        }
+                    }
                 }
             }
-            
+
             if (didPlayerAct)
             {
                 renderRequired = true;
@@ -115,24 +133,11 @@ namespace RogueMain
             }
             else
             {
-                CommandSys.ActivateMonsters();
+                CommandSys.ActivateEnemies();
                 renderRequired = true;
             }
-            // Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
-            mapConsole.SetBackColor(0, 0, mapWidth, mapHeight, Colors.FloorBackground);
-
-            //messageConsole.SetBackColor(0, 0, messageWidth, messageHeight, Palette.DbVegetation);
-            //messageConsole.Print(1, 1, "Messages", Colors.TextHeading);
-
-            //statConsole.SetBackColor(0, 0, statWidth, statHeight, Palette.DbOldStone);
-            //statConsole.Print(1, 1, "Stats", Colors.TextHeading);
-
-            inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
-            inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
         }
- 
-
-
+        
         //Рендер в консоли
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {

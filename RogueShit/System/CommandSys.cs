@@ -16,43 +16,6 @@ namespace RogueShit.System
     public class CommandSys
     {
         public bool IsPlayerTurn { get; set; }
-
-        public void EndPlayerTurn()
-        {
-            IsPlayerTurn = false;
-        }
-        public void ActivateMonsters()
-        {
-            IScheduleable scheduleable = RogueGame.SchedulingSystem.Get();
-            if (scheduleable is Player)
-            {
-                IsPlayerTurn = true;
-                RogueGame.SchedulingSystem.Add(RogueGame.Player);
-            }
-            else
-            {
-                Enemy enemy = scheduleable as Enemy;
-
-                if (enemy != null)
-                {
-                    enemy.PerformAction(this);
-                    RogueGame.SchedulingSystem.Add(enemy);
-                }
-
-                ActivateMonsters();
-            }
-        }
-
-        public void MoveEnemies(Enemy enemy, ICell cell)
-        {
-            if (!RogueGame.DungeonMap.SetActorPosition(enemy, cell.X, cell.Y))
-            {
-                if (RogueGame.Player.X == cell.X && RogueGame.Player.Y == cell.Y)
-                {
-                    Attack(enemy, RogueGame.Player);
-                }
-            }
-        }
         public static bool PlayersMove(Direction direction)
         {
             int x = RogueGame.Player.X;
@@ -96,6 +59,41 @@ namespace RogueShit.System
                 return true;
             }
             return false;
+        }
+        public void EndPlayerTurn()
+        {
+            IsPlayerTurn = false;
+        }
+        public void ActivateEnemies()
+        {
+            IScheduleable scheduleable = RogueGame.SchedulingSystem.Get();
+            if (scheduleable is Player)
+            {
+                IsPlayerTurn = true;
+                RogueGame.SchedulingSystem.Add(RogueGame.Player);
+            }
+            else
+            {
+                Enemy enemy = scheduleable as Enemy;
+
+                if (enemy != null)
+                {
+                    enemy.PerformAction(this);
+                    RogueGame.SchedulingSystem.Add(enemy);
+                }
+
+                ActivateEnemies();
+            }
+        }
+        public void MoveEnemies(Enemy enemy, ICell cell)
+        {
+            if (!RogueGame.DungeonMap.SetActorPosition(enemy, cell.X, cell.Y))
+            {
+                if (RogueGame.Player.X == cell.X && RogueGame.Player.Y == cell.Y)
+                {
+                    Attack(enemy, RogueGame.Player);
+                }
+            }
         }
         public static void Attack(Actor attacker, Actor defender)
         {
@@ -190,7 +188,7 @@ namespace RogueShit.System
         {
             if (defender is Player)
             {
-                RogueGame.MessLogs.AddLine($"  {defender.Name} was killed.");
+                RogueGame.MessLogs.AddLine($"  {defender.Name} was killed GIT GUD!.");
             }
             else if (defender is Enemy)
             {

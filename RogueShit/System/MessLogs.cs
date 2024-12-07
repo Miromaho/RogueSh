@@ -23,7 +23,6 @@ namespace RogueShit.System
         {
             _lines.Enqueue(message);
 
-
             if (_lines.Count > maxLines)
             {
                 _lines.Dequeue();
@@ -33,7 +32,6 @@ namespace RogueShit.System
 
         public void Draw(RLConsole console)
         {
-            console.Clear();
             string[] lines = _lines.ToArray();
             for (int i = 0; i < lines.Length; i++)
             {
