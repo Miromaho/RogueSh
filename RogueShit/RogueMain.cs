@@ -33,12 +33,12 @@ namespace RogueMain
         private static readonly int inventoryHeight = 11;
         private static RLConsole inventoryConsole;
         public static DungeonMap DungeonMap { get; set; }
-        public static Player Player { get;  set; }
+        public static Player Player { get; set; }
 
         private static bool renderRequired = true;
         public static CommandSys CommandSys { get; set; }
         public static MessLogs MessLogs { get; set; }
-        public static SchedulingSystem SchedulingSystem { get; set; }
+        public static SchedulingSystem turnOrder { get; set; }
 
         private static int mapLevel = 1;
 
@@ -50,7 +50,7 @@ namespace RogueMain
 
             string fontFileName = "ASCII8x8.png";
 
-            SchedulingSystem = new SchedulingSystem();
+            turnOrder = new SchedulingSystem();
 
             string consoleTitle = $"RougeShit - Level {mapLevel} - seed {seed}";
 
@@ -60,7 +60,7 @@ namespace RogueMain
 
             rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
 
-            MapGenerator mapGenerator = new MapGenerator( mapWidth, mapHeight, 12, 15, 6, mapLevel);
+            MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight, 12, 15, 6, mapLevel);
             DungeonMap = mapGenerator.CreateMap();
             DungeonMap.UpdatePlayerFieldOfView();
 
@@ -74,7 +74,7 @@ namespace RogueMain
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
-            
+
             //Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
             inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
             inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
@@ -82,62 +82,74 @@ namespace RogueMain
             rootConsole.Run();
         }
 
+        //Цикл хода. Вещи идут в этом порядке.
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
-            // Передвижение персонажа
             bool didPlayerAct = false;
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
             if (CommandSys.IsPlayerTurn)
             {
-                if (keyPress != null)
-                {
-                    if (keyPress.Key == RLKey.Up)
-                    {
-                        didPlayerAct = CommandSys.PlayersMove(Direction.Up);
-                    }
-                    else if (keyPress.Key == RLKey.Down)
-                    {
-                        didPlayerAct = CommandSys.PlayersMove(Direction.Down);
-                    }
-                    else if (keyPress.Key == RLKey.Left)
-                    {
-                        didPlayerAct = CommandSys.PlayersMove(Direction.Left);
-                    }
-                    else if (keyPress.Key == RLKey.Right)
-                    {
-                        didPlayerAct = CommandSys.PlayersMove(Direction.Right);
-                    }
-                    else if (keyPress.Key == RLKey.Escape)
-                    {
-                        rootConsole.Close();
-                    }
-                    else if (keyPress.Key == RLKey.Insert)
-                    {
-                        if (DungeonMap.CanMoveDownToNextLevel())
-                        {
-                            MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight, 20, 13, 7, ++mapLevel);
-                            DungeonMap = mapGenerator.CreateMap();
-                            MessLogs = new MessLogs();
-                            CommandSys = new CommandSys();
-                            rootConsole.Title = $"RogueShit - Level {mapLevel}";
-                            didPlayerAct = true;
-                        }
-                    }
-                }
+                didPlayerAct = PlayerAction(didPlayerAct, keyPress);
             }
 
             if (didPlayerAct)
             {
-                renderRequired = true;
                 CommandSys.EndPlayerTurn();
             }
+
             else
             {
-                CommandSys.ActivateEnemies();
-                renderRequired = true;
+                CommandSys.AddPlayerToTurnOrder();
+                CommandSys.AddEnemiesToTurnOrder();
             }
+
+            renderRequired = true;
         }
-        
+
+
+
+        // Возможные действия
+        private static bool PlayerAction(bool didPlayerAct, RLKeyPress keyPress)
+        {
+            if (keyPress != null)
+            {
+                if (keyPress.Key == RLKey.Up)
+                {
+                    didPlayerAct = CommandSys.PlayersMove(Direction.Up);
+                }
+                else if (keyPress.Key == RLKey.Down)
+                {
+                    didPlayerAct = CommandSys.PlayersMove(Direction.Down);
+                }
+                else if (keyPress.Key == RLKey.Left)
+                {
+                    didPlayerAct = CommandSys.PlayersMove(Direction.Left);
+                }
+                else if (keyPress.Key == RLKey.Right)
+                {
+                    didPlayerAct = CommandSys.PlayersMove(Direction.Right);
+                }
+                else if (keyPress.Key == RLKey.Escape)
+                {
+                    rootConsole.Close();
+                }
+                else if (keyPress.Key == RLKey.Insert)
+                {
+                    if (DungeonMap.CanMoveDownToNextLevel())
+                    {
+                        MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight, 20, 13, 7, ++mapLevel);
+                        DungeonMap = mapGenerator.CreateMap();
+                        MessLogs = new MessLogs();
+                        CommandSys = new CommandSys();
+                        rootConsole.Title = $"RogueShit - Level {mapLevel}";
+                        didPlayerAct = true;
+                    }
+                }
+            }
+
+            return didPlayerAct;
+        }
+
         //Рендер в консоли
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {

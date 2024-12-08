@@ -64,25 +64,28 @@ namespace RogueShit.System
         {
             IsPlayerTurn = false;
         }
-        public void ActivateEnemies()
+        public void AddPlayerToTurnOrder()
         {
-            IScheduleable scheduleable = RogueGame.SchedulingSystem.Get();
-            if (scheduleable is Player)
+            //IScheduleable turnOrder = RogueGame.turnOrder.Get();
+            IsPlayerTurn = true;
+            RogueGame.turnOrder.Add(RogueGame.Player);
+
+
+        }
+        public void AddEnemiesToTurnOrder()
+        {
+
+            IScheduleable turnOrder = RogueGame.turnOrder.Get();
+
+            Enemy enemy = turnOrder as Enemy;
+            if (enemy != null)
             {
-                IsPlayerTurn = true;
-                RogueGame.SchedulingSystem.Add(RogueGame.Player);
+                enemy.PerformAction(this);
+                RogueGame.turnOrder.Add(enemy);
             }
             else
             {
-                Enemy enemy = scheduleable as Enemy;
-
-                if (enemy != null)
-                {
-                    enemy.PerformAction(this);
-                    RogueGame.SchedulingSystem.Add(enemy);
-                }
-
-                ActivateEnemies();
+                AddEnemiesToTurnOrder();
             }
         }
         public void MoveEnemies(Enemy enemy, ICell cell)

@@ -22,7 +22,7 @@ public class DungeonMap : Map
 
     public DungeonMap()
     {
-        RogueGame.SchedulingSystem.Clear();
+        RogueGame.turnOrder.Clear();
 
         enemies = new List<Enemy>();
         Rooms = new List<Rectangle>();
@@ -92,7 +92,7 @@ public class DungeonMap : Map
         RogueGame.Player = player;
         SetIsWalkable(player.X, player.Y, false);
         UpdatePlayerFieldOfView();
-        RogueGame.SchedulingSystem.Add(player);
+        RogueGame.turnOrder.Add(player);
     }
 
     public void AddEnemy(Enemy enemy)
@@ -100,7 +100,7 @@ public class DungeonMap : Map
         enemies.Add(enemy);
 
         SetIsWalkable(enemy.X, enemy.Y, false);
-        RogueGame.SchedulingSystem.Add(enemy);
+        RogueGame.turnOrder.Add(enemy);
     }
 
     public void RemoveEnemy(Enemy enemy)
@@ -108,7 +108,7 @@ public class DungeonMap : Map
         enemies.Remove(enemy);
 
         SetIsWalkable(enemy.X, enemy.Y, true);
-        RogueGame.SchedulingSystem.Remove(enemy);
+        RogueGame.turnOrder.Remove(enemy);
     }
 
     public Enemy GetEnemyAt(int x, int y)

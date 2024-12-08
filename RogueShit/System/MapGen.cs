@@ -218,6 +218,21 @@ public class MapGenerator
                     }
                 }
             }
+            if (Dice.Roll("1D10") < 8)
+            {
+                var numberOfEnemies = Dice.Roll("1D4");
+                for (int i = 0; i < numberOfEnemies; i++)
+                {
+                    Point randomRoomLocation = map.GetRandomWalkableLocationInRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        var enemy = Gnome.Create(1);
+                        enemy.X = randomRoomLocation.X;
+                        enemy.Y = randomRoomLocation.Y;
+                        map.AddEnemy(enemy);
+                    }
+                }
+            }
         }
     }
 }
