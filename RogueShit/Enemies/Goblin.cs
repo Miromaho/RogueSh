@@ -26,7 +26,7 @@ namespace RogueShit.Enemies
                 Health = health,
                 MaxHealth = health,
                 Name = "Goblin",
-                Speed = 12,
+                Speed = 123,
                 Symbol = 'g'
             };
         }

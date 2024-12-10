@@ -34,8 +34,7 @@ namespace RogueShit.System
         // Пригодится когда враг убит чтобы удалить его до того, как он сделает свое действие
         public void Remove(IScheduleable scheduleable)
         {
-            KeyValuePair<int, List<IScheduleable>> scheduleableListFound
-              = new KeyValuePair<int, List<IScheduleable>>(-1, null);
+            KeyValuePair<int, List<IScheduleable>> scheduleableListFound = new KeyValuePair<int, List<IScheduleable>>(-1, null);
 
             foreach (var scheduleablesList in scheduleables)
             {
@@ -63,13 +62,11 @@ namespace RogueShit.System
             time = firstScheduleableGroup.Key;
             return firstScheduleable;
         }
-
         // текущее время для расписания
         public int GetTime()
         {
             return time;
         }
-
         // Сброс времени и очистка расписания
         public void Clear()
         {

@@ -23,16 +23,13 @@ public class DungeonMap : Map
     public DungeonMap()
     {
         RogueGame.turnOrder.Clear();
-
         enemies = new List<Enemy>();
         Rooms = new List<Rectangle>();
         Doors = new List<Door>();
     }
-
     public void UpdatePlayerFieldOfView()
     {
         Player player = RogueGame.Player;
-   
         ComputeFov(player.X, player.Y, player.Awareness, true);
 
         foreach (Cell cell in GetAllCells())
@@ -43,21 +40,14 @@ public class DungeonMap : Map
             }
         }
     }
-
- 
     public bool SetActorPosition(Actor actor, int x, int y)
     {
-
         if (GetCell(x, y).IsWalkable)
         {
-
             SetIsWalkable(actor.X, actor.Y, true);
-
             actor.X = x;
             actor.Y = y;
-
             SetIsWalkable(actor.X, actor.Y, false);
-
             OpenDoor(actor, x, y);
             if (actor is Player)
             {
@@ -67,12 +57,10 @@ public class DungeonMap : Map
         }
         return false;
     }
-
     public Door GetDoor(int x, int y)
     {
         return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
     }
-
     private void OpenDoor(Actor actor, int x, int y)
     {
         Door door = GetDoor(x, y);
@@ -80,13 +68,10 @@ public class DungeonMap : Map
         {
             door.IsOpen = true;
             var cell = GetCell(x, y);
-
             SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
-
             RogueGame.MessLogs.AddLine($"{actor.Name} opened a door");
         }
     }
-
     public void AddPlayer(Player player)
     {
         RogueGame.Player = player;
@@ -98,17 +83,15 @@ public class DungeonMap : Map
     public void AddEnemy(Enemy enemy)
     {
         enemies.Add(enemy);
-
         SetIsWalkable(enemy.X, enemy.Y, false);
         RogueGame.turnOrder.Add(enemy);
     }
 
-    public void RemoveEnemy(Enemy enemy)
+    public void RemoveEnemy(Enemy monster)
     {
-        enemies.Remove(enemy);
-
-        SetIsWalkable(enemy.X, enemy.Y, true);
-        RogueGame.turnOrder.Remove(enemy);
+        enemies.Remove(monster);
+        SetIsWalkable(monster.X, monster.Y, true);
+        RogueGame.turnOrder.Remove(monster);
     }
 
     public Enemy GetEnemyAt(int x, int y)
@@ -118,6 +101,7 @@ public class DungeonMap : Map
     public bool CanMoveDownToNextLevel()
     {
         Player player = RogueGame.Player;
+
         return StairsDown.X == player.X && StairsDown.Y == player.Y;
     }
     public void SetIsWalkable(int x, int y, bool isWalkable)
@@ -125,7 +109,6 @@ public class DungeonMap : Map
         Cell cell = (Cell)GetCell(x, y);
         SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
     }
-
     public Point GetRandomWalkableLocationInRoom(Rectangle room)
     {
         if (DoesRoomHaveWalkableSpace(room))
@@ -140,10 +123,8 @@ public class DungeonMap : Map
                 }
             }
         }
-
         return Point.Zero;
     }
-
     public bool DoesRoomHaveWalkableSpace(Rectangle room)
     {
         for (int x = 1; x <= room.Width - 2; x++)
@@ -161,7 +142,6 @@ public class DungeonMap : Map
 
     public void Draw(RLConsole mapConsole, RLConsole statConsole)
     {
-
         foreach (Cell cell in GetAllCells())
         {
             SetConsoleSymbolForCell(mapConsole, cell);
@@ -175,6 +155,7 @@ public class DungeonMap : Map
         StairsUp.Draw(mapConsole, this);
         StairsDown.Draw(mapConsole, this);
 
+
         int i = 0;
 
         foreach (Enemy enemy in enemies)
@@ -183,7 +164,6 @@ public class DungeonMap : Map
 
             if (IsInFov(enemy.X, enemy.Y))
             {
-
                 enemy.DrawStats(statConsole, i);
                 i++;
             }
@@ -197,6 +177,7 @@ public class DungeonMap : Map
         {
             return;
         }
+
 
         if (IsInFov(cell.X, cell.Y))
         {

@@ -87,26 +87,23 @@ namespace RogueMain
         {
             bool didPlayerAct = false;
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
-            if (CommandSys.IsPlayerTurn)
-            {
-                didPlayerAct = PlayerAction(didPlayerAct, keyPress);
-            }
+                if (CommandSys.IsPlayerTurn)
+                {
+                    didPlayerAct = PlayerAction(didPlayerAct, keyPress);
+                }
 
-            if (didPlayerAct)
-            {
-                CommandSys.EndPlayerTurn();
-            }
+                if (didPlayerAct)
+                {
+                    renderRequired = true;
+                    CommandSys.EndPlayerTurn();
+                }
 
-            else
-            {
-                CommandSys.AddPlayerToTurnOrder();
-                CommandSys.AddEnemiesToTurnOrder();
-            }
-
-            renderRequired = true;
+                else
+                {
+                    CommandSys.AddPlayerToTurnOrder();
+                    renderRequired = true;
+                }
         }
-
-
 
         // Возможные действия
         private static bool PlayerAction(bool didPlayerAct, RLKeyPress keyPress)
@@ -146,10 +143,8 @@ namespace RogueMain
                     }
                 }
             }
-
             return didPlayerAct;
         }
-
         //Рендер в консоли
         private static void OnRootConsoleRender(object sender, UpdateEventArgs e)
         {
@@ -160,11 +155,8 @@ namespace RogueMain
                 messageConsole.Clear();
 
                 DungeonMap.Draw(mapConsole, statConsole);
-
                 Player.Draw(mapConsole, DungeonMap);
-
                 Player.DrawStats(statConsole);
-
                 MessLogs.Draw(messageConsole);
 
                 RLConsole.Blit(mapConsole, 0, 0, mapWidth, mapHeight, rootConsole, 0, inventoryHeight);

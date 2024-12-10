@@ -14,18 +14,16 @@ namespace RogueShit.Core
         {
             Attack = 5;
             AttackChance = 50;
+            Awareness = 15;
+            Color = Colors.Player;
             Defense = 5;
             DefenseChance = 20;
             Gold = 0;
             Health = 24;
             MaxHealth = 24;
-            Awareness = 15;
             Speed = 10;
             Name = "Ivan";
-            Color = Colors.Player;
             Symbol = '@';
-            X = 12;
-            Y = 10;
         }
         public void DrawStats(RLConsole statConsole)
         {

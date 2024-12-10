@@ -5,6 +5,7 @@ using RogueShit.interfaces;
 using RogueShit.System;
 using System.Text;
 using System.Threading;
+using Path = RogueSharp.Path;
 
 namespace RogueShit.Behaviors
 {
@@ -24,17 +25,20 @@ namespace RogueShit.Behaviors
                     enemy.TurnsAlerted = 1;
                 }
             }
+
             if (enemy.TurnsAlerted.HasValue)
             {
                 dungeonMap.SetIsWalkable(enemy.X, enemy.Y, true);
                 dungeonMap.SetIsWalkable(player.X, player.Y, true);
 
                 PathFinder pathFinder = new PathFinder(dungeonMap);
-                RogueSharp.Path path = null;
+                Path path = null;
 
                 try
                 {
-                    path = pathFinder.ShortestPath(dungeonMap.GetCell(enemy.X, enemy.Y), dungeonMap.GetCell(player.X, player.Y));
+                    path = pathFinder.ShortestPath(
+                       dungeonMap.GetCell(enemy.X, enemy.Y),
+                       dungeonMap.GetCell(player.X, player.Y));
                 }
                 catch (PathNotFoundException)
                 {
@@ -48,16 +52,16 @@ namespace RogueShit.Behaviors
                 {
                     try
                     {
-                        commandSystem.MoveEnemies(enemy, path.StepForward());
+
+                        commandSystem.MoveEnemies(enemy, (Cell)path.StepForward());
                     }
                     catch (NoMoreStepsException)
                     {
-                        RogueGame.MessLogs.AddLine($"{enemy.Name} waits for a turn");
+                        RogueGame.MessLogs.AddLine($"{enemy.Name} growls in frustration");
                     }
                 }
 
                 enemy.TurnsAlerted++;
-
                 if (enemy.TurnsAlerted > 15)
                 {
                     enemy.TurnsAlerted = null;

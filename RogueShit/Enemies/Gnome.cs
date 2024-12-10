@@ -26,8 +26,8 @@ namespace RogueShit.Enemies
                 Health = health,
                 MaxHealth = health,
                 Name = "Gnome",
-                Speed = 16,
-                Symbol = 'g'
+                Speed = 164,
+                Symbol = 'G'
             };
         }
     }

@@ -112,7 +112,6 @@ public class MapGenerator
     }
     private void CreateDoors(Rectangle room)
     {
-
         int xMin = room.Left;
         int xMax = room.Right;
         int yMin = room.Top;
