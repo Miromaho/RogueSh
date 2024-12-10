@@ -1,13 +1,13 @@
 ﻿using RogueMain.Core;
 using RogueSharp.DiceNotation;
-using RougelikeCL.Core;
+using RoguelikeCL.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RougelikeCL.Enemies
+namespace RoguelikeCL.Enemies
 {
     public class Goblin : Enemy
     {

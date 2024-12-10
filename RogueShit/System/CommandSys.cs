@@ -2,8 +2,8 @@
 using RogueMain;
 using RogueSharp;
 using RogueSharp.DiceNotation;
-using RougelikeCL.Core;
-using RougelikeCL.interfaces;
+using RoguelikeCL.Core;
+using RoguelikeCL.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RougelikeCL.System
+namespace RoguelikeCL.System
 {
     public class CommandSys
     {

@@ -1,13 +1,13 @@
 ﻿using RogueMain;
 using RogueSharp;
-using RougelikeCL.Core;
-using RougelikeCL.interfaces;
-using RougelikeCL.System;
+using RoguelikeCL.Core;
+using RoguelikeCL.interfaces;
+using RoguelikeCL.System;
 using System.Text;
 using System.Threading;
 using Path = RogueSharp.Path;
 
-namespace RougelikeCL.Behaviors
+namespace RoguelikeCL.Behaviors
 {
     public class StandardMoveAndAttack : IBehavior
     { 

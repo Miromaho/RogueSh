@@ -1,14 +1,14 @@
 ﻿using RLNET;
 using RogueMain.Core;
 using RogueSharp;
-using RougelikeCL.interfaces;
+using RoguelikeCL.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RougelikeCL.Core
+namespace RoguelikeCL.Core
 {
     public class Actor : IActor, IDrawable, IScheduleable
     {

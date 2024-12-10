@@ -9,7 +9,7 @@ using RLNET;
 using RogueMain;
 using RogueMain.Core;
 using RogueSharp;
-using RougelikeCL.Core;
+using RoguelikeCL.Core;
 
 public class DungeonMap : Map
 {

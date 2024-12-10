@@ -8,8 +8,8 @@ using RLNET;
 using RogueMain;
 using RogueSharp;
 using RogueSharp.DiceNotation;
-using RougelikeCL.Core;
-using RougelikeCL.Enemies;
+using RoguelikeCL.Core;
+using RoguelikeCL.Enemies;
 
 public class MapGenerator
 {
