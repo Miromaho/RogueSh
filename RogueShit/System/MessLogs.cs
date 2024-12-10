@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.System
+namespace RougelikeCL.System
 {
     public class MessLogs
     {

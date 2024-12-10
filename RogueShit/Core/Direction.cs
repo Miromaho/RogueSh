@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.Core
+namespace RougelikeCL.Core
 {
     public enum Direction
     {

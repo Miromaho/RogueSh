@@ -1,11 +1,11 @@
-﻿using RogueShit.interfaces;
+﻿using RougelikeCL.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.System
+namespace RougelikeCL.System
 {
     public class SchedulingSystem
     {

@@ -1,5 +1,5 @@
-﻿using RogueShit.Core;
-using RogueShit.System;
+﻿using RougelikeCL.Core;
+using RougelikeCL.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RogueShit.interfaces
+namespace RougelikeCL.interfaces
 {
     public interface IBehavior
     {

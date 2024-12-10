@@ -1,14 +1,14 @@
 ﻿using RLNET;
 using RogueMain.Core;
-using RogueShit.Behaviors;
-using RogueShit.System;
+using RougelikeCL.Behaviors;
+using RougelikeCL.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.Core
+namespace RougelikeCL.Core
 {
     public class Enemy : Actor
     {

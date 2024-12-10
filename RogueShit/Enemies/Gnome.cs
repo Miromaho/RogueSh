@@ -1,13 +1,13 @@
 ﻿using RogueMain.Core;
 using RogueSharp.DiceNotation;
-using RogueShit.Core;
+using RougelikeCL.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.Enemies
+namespace RougelikeCL.Enemies
 {
     public class Gnome : Enemy
     {

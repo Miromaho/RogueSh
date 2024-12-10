@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.interfaces
+namespace RougelikeCL.interfaces
 {
     public interface IDrawable
     {

@@ -1,14 +1,14 @@
 ﻿using RLNET;
 using RogueMain.Core;
 using RogueSharp;
-using RogueShit.interfaces;
+using RougelikeCL.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RogueShit.Core
+namespace RougelikeCL.Core
 {
     public class Door : IDrawable
     {

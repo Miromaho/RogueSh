@@ -1,8 +1,8 @@
 ﻿using RLNET;
 using System.Drawing;
 using RogueMain.Core;
-using RogueShit.Core;
-using RogueShit.System;
+using RougelikeCL.Core;
+using RougelikeCL.System;
 using RogueSharp.Random;
 
 namespace RogueMain
@@ -52,7 +52,7 @@ namespace RogueMain
 
             turnOrder = new SchedulingSystem();
 
-            string consoleTitle = $"RougeShit - Level {mapLevel} - seed {seed}";
+            string consoleTitle = $"RougelikeCL - Level {mapLevel} - seed {seed}";
 
             MessLogs = new MessLogs();
             MessLogs.AddLine("The Ivan arrives on level 1");
