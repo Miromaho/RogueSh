@@ -10,6 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RoguelikeCL.Equipment;
+using RLNET;
+using RoguelikeCl.Items;
 
 namespace RoguelikeCL.System
 {
@@ -18,28 +21,32 @@ namespace RoguelikeCL.System
         public bool IsPlayerTurn { get; set; }
         public static bool PlayersMove(Direction direction)
         {
-            int x = RogueGame.Player.X;
-            int y = RogueGame.Player.Y;
+            int x;
+            int y;
             switch (direction)
             {
                 case Direction.Up:
                     {
+                        x = RogueGame.Player.X;
                         y = RogueGame.Player.Y - 1;
                         break;
                     }
                 case Direction.Down:
                     {
+                        x = RogueGame.Player.X;
                         y = RogueGame.Player.Y + 1;
                         break;
                     }
                 case Direction.Left:
                     {
                         x = RogueGame.Player.X - 1;
+                        y = RogueGame.Player.Y;
                         break;
                     }
                 case Direction.Right:
                     {
                         x = RogueGame.Player.X + 1;
+                        y = RogueGame.Player.Y;
                         break;
                     }
                 default:
@@ -59,10 +66,6 @@ namespace RoguelikeCL.System
                 return true;
             }
             return false;
-        }
-        public void EndPlayerTurn()
-        {
-            IsPlayerTurn = false;
         }
         public void AddPlayerToTurnOrder()
         {
@@ -159,10 +162,9 @@ namespace RoguelikeCL.System
             {
                 attackMessage.AppendFormat("scoring {0} hits.", hits);
                 defenseMessage.AppendFormat("  {0} defends and rolls: ", defender.Name);
-
                 DiceExpression defenceDice = new DiceExpression().Dice(defender.Defense, 20);
-                DiceResult defenseRoll = defenceDice.Roll();
 
+                DiceResult defenseRoll = defenceDice.Roll();
                 foreach (TermResult termResult in defenseRoll.Results)
                 {
                     defenseMessage.Append(termResult.Value + ", ");
@@ -206,10 +208,98 @@ namespace RoguelikeCL.System
             }
             else if (defender is Enemy)
             {
+                if (defender.Head != null && defender.Head != HeadEquipment.None())
+                {
+                    RogueGame.DungeonMap.AddTreasure(defender.X, defender.Y, defender.Head);
+                }
+                if (defender.Body != null && defender.Body != BodyEquipment.None())
+                {
+                    RogueGame.DungeonMap.AddTreasure(defender.X, defender.Y, defender.Body);
+                }
+                if (defender.Hand != null && defender.Hand != HandEquipment.None())
+                {
+                    RogueGame.DungeonMap.AddTreasure(defender.X, defender.Y, defender.Hand);
+                }
+                if (defender.Feet != null && defender.Feet != FeetEquipment.None())
+                {
+                    RogueGame.DungeonMap.AddTreasure(defender.X, defender.Y, defender.Feet);
+                }
+                RogueGame.DungeonMap.AddGold(defender.X, defender.Y, defender.Gold);
                 RogueGame.DungeonMap.RemoveEnemy((Enemy)defender);
 
                 RogueGame.MessLogs.AddLine($"  {defender.Name} died and dropped {defender.Gold} gold");
             }
+        }
+        public bool HandleKey(RLKey key)
+        {
+            if (key == RLKey.Q)
+            {
+                return RogueGame.Player.QAbility.Perform();
+            }
+            if (key == RLKey.W)
+            {
+                return RogueGame.Player.WAbility.Perform();
+            }
+            if (key == RLKey.E)
+            {
+                return RogueGame.Player.EAbility.Perform();
+            }
+            if (key == RLKey.R)
+            {
+                return RogueGame.Player.RAbility.Perform();
+            }
+
+
+            bool didUseItem = false;
+            if (key == RLKey.Number1)
+            {
+                didUseItem = RogueGame.Player.Item1.Use();
+            }
+            else if (key == RLKey.Number2)
+            {
+                didUseItem = RogueGame.Player.Item2.Use();
+            }
+            else if (key == RLKey.Number3)
+            {
+                didUseItem = RogueGame.Player.Item3.Use();
+            }
+            else if (key == RLKey.Number4)
+            {
+                didUseItem = RogueGame.Player.Item4.Use();
+            }
+
+            if (didUseItem)
+            {
+                RemoveItemsWithNoRemainingUses();
+            }
+
+            return didUseItem;
+        }
+
+        private static void RemoveItemsWithNoRemainingUses()
+        {
+            if (RogueGame.Player.Item1.RemainingUses <= 0)
+            {
+                RogueGame.Player.Item1 = new NoItem();
+            }
+            if (RogueGame.Player.Item2.RemainingUses <= 0)
+            {
+                RogueGame.Player.Item2 = new NoItem();
+            }
+            if (RogueGame.Player.Item3.RemainingUses <= 0)
+            {
+                RogueGame.Player.Item3 = new NoItem();
+            }
+            if (RogueGame.Player.Item4.RemainingUses <= 0)
+            {
+                RogueGame.Player.Item4 = new NoItem();
+            }
+        }
+
+        public void EndPlayerTurn()
+        {
+            IsPlayerTurn = false;
+            RogueGame.Player.Tick();
         }
     }
 }

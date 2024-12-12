@@ -4,6 +4,7 @@ using RogueMain.Core;
 using RoguelikeCL.Core;
 using RoguelikeCL.System;
 using RogueSharp.Random;
+using RoguelikeCL.Items;
 
 namespace RogueMain
 {
@@ -28,20 +29,19 @@ namespace RogueMain
         private static readonly int statHeight = 70;
         private static RLConsole statConsole;
 
-
         private static readonly int inventoryWidth = 80;
         private static readonly int inventoryHeight = 11;
         private static RLConsole inventoryConsole;
+
+        private static int mapLevel = 1;
+        private static bool renderRequired = true;
+
         public static DungeonMap DungeonMap { get; set; }
         public static Player Player { get; set; }
-
-        private static bool renderRequired = true;
         public static CommandSys CommandSys { get; set; }
         public static MessLogs MessLogs { get; set; }
         public static SchedulingSystem turnOrder { get; set; }
-
-        private static int mapLevel = 1;
-
+        public static TargetingSys TargetingSys { get; private set; }
         public static IRandom Random { get; set; }
         public static void Main()
         {
@@ -58,26 +58,28 @@ namespace RogueMain
             MessLogs.AddLine("The Ivan arrives on level 1");
             MessLogs.AddLine($"Level seed: {seed}");
 
-            rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
 
             MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight, 12, 15, 6, mapLevel);
             DungeonMap = mapGenerator.CreateMap();
-            DungeonMap.UpdatePlayerFieldOfView();
 
+            rootConsole = new RLRootConsole(fontFileName, screenWidth, screenHeight, 8, 8, 1f, consoleTitle);
             mapConsole = new RLConsole(mapWidth, mapHeight);
             messageConsole = new RLConsole(messageWidth, messageHeight);
             statConsole = new RLConsole(statWidth, statHeight);
             inventoryConsole = new RLConsole(inventoryWidth, inventoryHeight);
 
             CommandSys = new CommandSys();
+            TargetingSys = new TargetingSys();
+
+            Player.Item1 = new TeleportScroll();
 
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
 
             //Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
-            inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
-            inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
+            //inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
+            //inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
             rootConsole.Run();
         }
@@ -87,7 +89,15 @@ namespace RogueMain
         {
             bool didPlayerAct = false;
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
-                if (CommandSys.IsPlayerTurn)
+            if (TargetingSys.IsPlayerTargeting)
+            {
+                if (keyPress != null)
+                {
+                    renderRequired = true;
+                    TargetingSys.HandleKey(keyPress.Key);
+                }
+            }
+            if (CommandSys.IsPlayerTurn)
                 {
                     didPlayerAct = PlayerAction(didPlayerAct, keyPress);
                 }
@@ -142,6 +152,10 @@ namespace RogueMain
                         didPlayerAct = true;
                     }
                 }
+                else
+                {
+                    didPlayerAct = CommandSys.HandleKey(keyPress.Key);
+                }
             }
             return didPlayerAct;
         }
@@ -153,11 +167,12 @@ namespace RogueMain
                 mapConsole.Clear();
                 statConsole.Clear();
                 messageConsole.Clear();
+                inventoryConsole.Clear();
 
-                DungeonMap.Draw(mapConsole, statConsole);
-                Player.Draw(mapConsole, DungeonMap);
-                Player.DrawStats(statConsole);
+                DungeonMap.Draw(mapConsole, statConsole, inventoryConsole);
+
                 MessLogs.Draw(messageConsole);
+                TargetingSys.Draw(mapConsole);
 
                 RLConsole.Blit(mapConsole, 0, 0, mapWidth, mapHeight, rootConsole, 0, inventoryHeight);
                 RLConsole.Blit(statConsole, 0, 0, statWidth, statHeight, rootConsole, mapWidth, 0);

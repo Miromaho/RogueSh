@@ -19,7 +19,7 @@ namespace RoguelikeCL.System
         }
 
         // Добавление нового объекта в расписание 
-        // помещает объект в текущее время плюс свойство объекта Time
+        // помещает объект в текущее время плюс свойство объекта Time(время)
         public void Add(IScheduleable scheduleable)
         {
             int key = time + scheduleable.Time;

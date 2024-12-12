@@ -8,8 +8,10 @@ using RLNET;
 using RogueMain;
 using RogueSharp;
 using RogueSharp.DiceNotation;
-using RoguelikeCL.Core;
 using RoguelikeCL.Enemies;
+using GoRogue.DiceNotation.Terms;
+using RoguelikeCL.System;
+using RoguelikeCL.Core;
 
 public class MapGenerator
 {
@@ -18,8 +20,9 @@ public class MapGenerator
     private readonly int maxRooms;
     private readonly int roomMaxSize;
     private readonly int roomMinSize;
-
+    private readonly int level;
     private readonly DungeonMap map;
+    private readonly EquipmentGen equipmentGen;
 
     public MapGenerator(int Width, int Height, int MaxRooms, int RoomMaxSize, int RoomMinSize, int mapLevel)
     {
@@ -29,6 +32,7 @@ public class MapGenerator
         roomMaxSize = RoomMaxSize;
         roomMinSize = RoomMinSize;
         map = new DungeonMap();
+        equipmentGen = new EquipmentGen(level);
     }
     public DungeonMap CreateMap()
     {
@@ -50,6 +54,7 @@ public class MapGenerator
                 map.Rooms.Add(newRoom);
             }
         }
+
         for (int r = 0; r < map.Rooms.Count; r++)
         {
             if (r == 0)
@@ -61,7 +66,7 @@ public class MapGenerator
             int currentRoomCenterX = map.Rooms[r].Center.X;
             int currentRoomCenterY = map.Rooms[r].Center.Y;
 
-            if (RogueGame.Random.Next(1, 2) == 1)
+            if (RogueGame.Random.Next(0, 2) == 0)
             {
                 CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, previousRoomCenterY);
                 CreateVerticalTunnel(previousRoomCenterY, currentRoomCenterY, currentRoomCenterX);
@@ -76,14 +81,16 @@ public class MapGenerator
         foreach (Rectangle room in map.Rooms)
         {
             CreateRoom(room);
-            CreateDoors(room);
         }
 
         CreateStairs();
         PlacePlayer();
         PlaceEnemies();
-        return map;
+        PlaceEquipment();
+        PlaceItems();
+        PlaceAbility();
 
+        return map;
     }
 
     private void CreateRoom(Rectangle room)
@@ -171,18 +178,6 @@ public class MapGenerator
         }
         return false;
     }
-    private void PlacePlayer()
-    {
-        Player player = RogueGame.Player;
-        if (player == null)
-        {
-            player = new Player();
-        }
-        player.X = map.Rooms[0].Center.X;
-        player.Y = map.Rooms[0].Center.Y;
-
-        map.AddPlayer(player);
-    }
     private void CreateStairs()
     {
         map.StairsUp = new Stairs
@@ -231,6 +226,80 @@ public class MapGenerator
                         map.AddEnemy(enemy);
                     }
                 }
+            }
+        }
+    }
+    private void PlaceEquipment()
+    {
+        foreach (var room in map.Rooms)
+        {
+            if (Dice.Roll("1D10") < 3)
+            {
+                if (map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = map.GetRandomLocationInRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        RoguelikeCL.Core.Equipment equipment;
+                        try
+                        {
+                            equipment = equipmentGen.CreateEquipment();
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            return;
+                        }
+                        Point location = map.GetRandomLocationInRoom(room);
+                        map.AddTreasure(location.X, location.Y, equipment);
+                    }
+                }
+            }
+        }
+    }
+
+    private void PlaceItems()
+    {
+        foreach (var room in map.Rooms)
+        {
+            if (Dice.Roll("1D10") < 3)
+            {
+                if (map.DoesRoomHaveWalkableSpace(room))
+                {
+                    Point randomRoomLocation = map.GetRandomLocationInRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        Item item = ItemGen.CreateItem();
+                        Point location = map.GetRandomLocationInRoom(room);
+                        map.AddTreasure(location.X, location.Y, item);
+                    }
+                }
+            }
+        }
+    }
+
+    private void PlacePlayer()
+    {
+        Player player = ActorGen.CreatePlayer();
+
+        player.X = map.Rooms[0].Center.X;
+        player.Y = map.Rooms[0].Center.Y;
+
+        map.AddPlayer(player);
+    }
+
+    private void PlaceAbility()
+    {
+        if (level == 1 || level % 3 == 0)
+        {
+            try
+            {
+                var ability = AbilityGen.CreateAbility();
+                int roomIndex = RogueGame.Random.Next(0, map.Rooms.Count - 1);
+                Point location = map.GetRandomLocationInRoom(map.Rooms[roomIndex]);
+                map.AddTreasure(location.X, location.Y, ability);
+            }
+            catch (InvalidOperationException)
+            {
             }
         }
     }

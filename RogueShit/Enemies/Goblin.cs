@@ -6,11 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RoguelikeCL.Behaviors;
+using RoguelikeCL.System;
 
 namespace RoguelikeCL.Enemies
 {
     public class Goblin : Enemy
     {
+        private int? turnsSpentRunning = null;
         public static Goblin Create(int level)
         {
             int health = Dice.Roll("1D5");
@@ -29,6 +32,32 @@ namespace RoguelikeCL.Enemies
                 Speed = 123,
                 Symbol = 'g'
             };
+        }
+        public override void PerformAction(CommandSys commandSys)
+        {
+            var fullyHealBehavior = new FullyHeal();
+            var runAwayBehavior = new RunAway();
+            if (turnsSpentRunning.HasValue && turnsSpentRunning.Value > 15)
+            {
+                fullyHealBehavior.Act(this, commandSys);
+                turnsSpentRunning = null;
+            }
+            else if (Health < MaxHealth)
+            {
+                runAwayBehavior.Act(this, commandSys);
+                if (turnsSpentRunning.HasValue)
+                {
+                    turnsSpentRunning += 1;
+                }
+                else
+                {
+                    turnsSpentRunning = 1;
+                }
+            }
+            else
+            {
+                base.PerformAction(commandSys);
+            }
         }
     }
 }

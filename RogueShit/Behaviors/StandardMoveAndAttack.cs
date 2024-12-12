@@ -11,7 +11,7 @@ namespace RoguelikeCL.Behaviors
 {
     public class StandardMoveAndAttack : IBehavior
     { 
-        public bool Act(Enemy enemy, CommandSys commandSystem)
+        public bool Act(Enemy enemy, CommandSys commandSys)
         {
             DungeonMap dungeonMap = RogueGame.DungeonMap;
             Player player = RogueGame.Player;
@@ -33,12 +33,9 @@ namespace RoguelikeCL.Behaviors
 
                 PathFinder pathFinder = new PathFinder(dungeonMap);
                 Path path = null;
-
                 try
                 {
-                    path = pathFinder.ShortestPath(
-                       dungeonMap.GetCell(enemy.X, enemy.Y),
-                       dungeonMap.GetCell(player.X, player.Y));
+                    path = pathFinder.ShortestPath(dungeonMap.GetCell(enemy.X, enemy.Y), dungeonMap.GetCell(player.X, player.Y));
                 }
                 catch (PathNotFoundException)
                 {
@@ -53,7 +50,7 @@ namespace RoguelikeCL.Behaviors
                     try
                     {
 
-                        commandSystem.MoveEnemies(enemy, (Cell)path.StepForward());
+                        commandSys.MoveEnemies(enemy, (Cell)path.StepForward());
                     }
                     catch (NoMoreStepsException)
                     {
