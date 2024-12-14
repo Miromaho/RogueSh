@@ -43,6 +43,7 @@ namespace RogueMain
         public static SchedulingSystem turnOrder { get; set; }
         public static TargetingSys TargetingSys { get; private set; }
         public static IRandom Random { get; set; }
+        
         public static void Main()
         {
             int seed = (int)DateTime.UtcNow.Ticks;
@@ -88,6 +89,7 @@ namespace RogueMain
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
             bool didPlayerAct = false;
+            RogueGame.Player.Tick();
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
             if (TargetingSys.IsPlayerTargeting)
             {
@@ -113,6 +115,12 @@ namespace RogueMain
                     CommandSys.AddPlayerToTurnOrder();
                     renderRequired = true;
                 }
+
+            if (Player.Health <= 0)
+            {
+                Console.WriteLine($"You lose");
+                rootConsole.Close();
+            }
         }
 
         // Возможные действия

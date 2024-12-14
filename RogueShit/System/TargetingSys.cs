@@ -108,7 +108,6 @@ namespace RoguelikeCL.System
             StopTargeting();
             return true;
          }
-
          return false;
       }
 

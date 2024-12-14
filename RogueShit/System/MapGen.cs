@@ -77,6 +77,11 @@ public class MapGenerator
                 CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
             }
         }
+        foreach (Rectangle room in map.Rooms)
+        {
+            CreateRoom(room);
+            CreateDoors(room);
+        }
 
         foreach (Rectangle room in map.Rooms)
         {
