@@ -13,7 +13,7 @@ namespace RoguelikeCL.Enemies
     {
         public static Gnome Create(int level)
         {
-            int health = Dice.Roll("1D3");
+            int health = Dice.Roll("3D6");
             return new Gnome
             {
                 Attack = Dice.Roll("3D2") + level / 3,
@@ -26,7 +26,7 @@ namespace RoguelikeCL.Enemies
                 Health = health,
                 MaxHealth = health,
                 Name = "Gnome",
-                Speed = 164,
+                Speed = 165,
                 Symbol = 'G'
             };
         }

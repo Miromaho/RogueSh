@@ -16,7 +16,7 @@ namespace RoguelikeCL.Enemies
         private int? turnsSpentRunning = null;
         public static Goblin Create(int level)
         {
-            int health = Dice.Roll("1D5");
+            int health = Dice.Roll("2D6");
             return new Goblin
             {
                 Attack = Dice.Roll("1D2") + level / 3,
@@ -29,7 +29,7 @@ namespace RoguelikeCL.Enemies
                 Health = health,
                 MaxHealth = health,
                 Name = "Goblin",
-                Speed = 123,
+                Speed = 120,
                 Symbol = 'g'
             };
         }

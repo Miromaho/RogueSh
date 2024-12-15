@@ -2,6 +2,7 @@ using RogueSharp;
 using RoguelikeCL.Core;
 using RoguelikeCL.Enemies;
 using RogueMain.Core;
+using RoguelikeCl.Enemies;
 
 namespace RoguelikeCL.System
 {
@@ -13,6 +14,7 @@ namespace RoguelikeCL.System
       {
          Pool<Enemy> enemyPool = new Pool<Enemy>();
          enemyPool.Add( Gnome.Create( level ), 25 );
+         enemyPool.Add(Bandit.Create(level), 25 );
          enemyPool.Add( Goblin.Create( level ), 50 );
 
          Enemy enemy = enemyPool.Get();
@@ -30,7 +32,7 @@ namespace RoguelikeCL.System
                player = new Player {
                Attack = 5,
                AttackChance = 50,
-               Awareness = 15,
+               Awareness = 10,
                Color = Colors.Player,
                Defense = 2,
                DefenseChance = 20,

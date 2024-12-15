@@ -5,6 +5,7 @@ using RoguelikeCL.Core;
 using RoguelikeCL.System;
 using RogueSharp.Random;
 using RoguelikeCL.Items;
+using RoguelikeCl.Items;
 
 namespace RogueMain
 {
@@ -17,13 +18,12 @@ namespace RogueMain
         private static RLRootConsole rootConsole;
 
         private static readonly int mapWidth = 80;
-        private static readonly int mapHeight = 48;
+        private static readonly int mapHeight = 50;
         private static RLConsole mapConsole;
 
-        private static readonly int messageWidth = 80;
-        private static readonly int messageHeight = 11;
+        private static readonly int messageWidth = 80; //20
+        private static readonly int messageHeight = 11;//70
         private static RLConsole messageConsole;
-
 
         private static readonly int statWidth = 20;
         private static readonly int statHeight = 70;
@@ -73,7 +73,6 @@ namespace RogueMain
             TargetingSys = new TargetingSys();
 
             Player.Item1 = new TeleportScroll();
-
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;

@@ -16,7 +16,6 @@ namespace RoguelikeCL.System
             abilityPool.Add( new Heal( 10 ), 10 );
             abilityPool.Add( new MagicMissile( 2, 80 ), 10 );
          }
-
          return abilityPool.Get();
       }
    }

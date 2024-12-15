@@ -288,7 +288,7 @@ public class DungeonMap : Map
         }
     }
 
-    internal IEnumerable<Cell> GetCellsInArea(int x, int y, int area)
+    public IEnumerable<Cell> GetCellsInArea(int x, int y, int area)
     {
         throw new NotImplementedException();
     }

@@ -32,6 +32,7 @@ namespace RogueMain.Core
         public static RLColor ComplimentDarkest = new RLColor(71, 56, 45);
 
         // http://pixeljoint.com/forum/forum_posts.asp?TID=12795 ещё одна ссылка на сайт с политрой
+        public static RLColor DbBandit = new RLColor(163, 132, 98);
         public static RLColor DbGold = new RLColor(167, 139, 6);
         public static RLColor DbGoblin = new RLColor(32, 72, 11);
         public static RLColor DbGnome = new RLColor(83, 32, 32);

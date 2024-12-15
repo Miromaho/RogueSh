@@ -12,6 +12,7 @@ using RoguelikeCL.Enemies;
 using GoRogue.DiceNotation.Terms;
 using RoguelikeCL.System;
 using RoguelikeCL.Core;
+using RoguelikeCl.Enemies;
 
 public class MapGenerator
 {
@@ -97,14 +98,13 @@ public class MapGenerator
 
         return map;
     }
-
     private void CreateRoom(Rectangle room)
     {
         for (int x = room.Left + 1; x < room.Right; x++)
         {
             for (int y = room.Top + 1; y < room.Bottom; y++)
             {
-                map.SetCellProperties(x, y, true, true, true);
+                map.SetCellProperties(x, y, true, true);
             }
         }
     }
@@ -200,6 +200,7 @@ public class MapGenerator
     }
     private void PlaceEnemies()
     {
+        //goblin
         foreach (var room in map.Rooms)
         {
             if (Dice.Roll("1D10") < 8)
@@ -217,9 +218,26 @@ public class MapGenerator
                     }
                 }
             }
-            if (Dice.Roll("1D10") < 8)
+            //Bandit
+            if (Dice.Roll("1D10") < 5)
             {
-                var numberOfEnemies = Dice.Roll("1D4");
+                var numberOfEnemies = Dice.Roll("1D2");
+                for (int i = 0; i < numberOfEnemies; i++)
+                {
+                    Point randomRoomLocation = map.GetRandomWalkableLocationInRoom(room);
+                    if (randomRoomLocation != null)
+                    {
+                        var enemy = Bandit.Create(1);
+                        enemy.X = randomRoomLocation.X;
+                        enemy.Y = randomRoomLocation.Y;
+                        map.AddEnemy(enemy);
+                    }
+                }
+            }
+            //Gnome
+            if (Dice.Roll("1D10") < 3)
+            {
+                var numberOfEnemies = Dice.Roll("1D3");
                 for (int i = 0; i < numberOfEnemies; i++)
                 {
                     Point randomRoomLocation = map.GetRandomWalkableLocationInRoom(room);

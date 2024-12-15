@@ -1,4 +1,5 @@
-﻿using RoguelikeCL.Core;
+﻿using RoguelikeCl.Items;
+using RoguelikeCL.Core;
 using RoguelikeCL.Items;
 namespace RoguelikeCL.System
 {
@@ -10,8 +11,9 @@ namespace RoguelikeCL.System
 // Сюда добавлять предметы которые генерируются на уровне
          itemPool.Add( new HealingPotion(), 20 );
          itemPool.Add( new TeleportScroll(), 20 );
-
-         return itemPool.Get();
+         itemPool.Add( new Whetstone(), 10);
+         itemPool.Add( new DestructionWand(), 5);
+            return itemPool.Get();
       }
    }
 }
