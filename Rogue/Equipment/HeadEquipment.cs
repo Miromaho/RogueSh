@@ -15,7 +15,15 @@
             Name = "Leather"
          };
       }
-
+      public static HeadEquipment Fur()
+      {
+         return new HeadEquipment()
+         {
+                Defense = 0,
+                DefenseChance = 10,
+                Name = "Fur"
+         };
+      }
       public static HeadEquipment Chain()
       {
          return new HeadEquipment() {

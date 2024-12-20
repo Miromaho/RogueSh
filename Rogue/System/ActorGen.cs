@@ -1,4 +1,4 @@
-using RogueSharp;
+﻿using RogueSharp;
 using RoguelikeCL.Core;
 using RoguelikeCL.Enemies;
 using RogueMain.Core;
@@ -42,7 +42,7 @@ namespace RoguelikeCL.System
                Name = "Ivan",
                Speed = 10,
                Symbol = '@'
-            };
+               };
          }
 
          return player;

@@ -18,21 +18,25 @@ namespace RoguelikeCL.Core
         public IAbility WAbility { get; set; }
         public IAbility EAbility { get; set; }
         public IAbility RAbility { get; set; }
+        public IAbility AAbility { get; set; }
 
         public Iitem Item1 { get; set; }
         public Iitem Item2 { get; set; }
         public Iitem Item3 { get; set; }
         public Iitem Item4 { get; set; }
+        public Iitem Item5 { get; set; }
         public Player()
         {
             QAbility = new DoNothing();
             WAbility = new DoNothing();
             EAbility = new DoNothing();
             RAbility = new DoNothing();
+            AAbility = new DoNothing();
             Item1 = new NoItem();
             Item2 = new NoItem();
             Item3 = new NoItem();
             Item4 = new NoItem();
+            Item5 = new NoItem();
         }
 
         public bool AddAbility(IAbility ability)
@@ -52,6 +56,10 @@ namespace RoguelikeCL.Core
             else if (RAbility is DoNothing)
             {
                 RAbility = ability;
+            }
+            else if (AAbility is DoNothing)
+            {
+                AAbility = ability;
             }
             else
             {
@@ -78,6 +86,10 @@ namespace RoguelikeCL.Core
             else if (Item4 is NoItem)
             {
                 Item4 = item;
+            }
+            else if (Item5 is NoItem)
+            {
+                Item5 = item;
             }
             else
             {
@@ -108,12 +120,14 @@ namespace RoguelikeCL.Core
             DrawAbility(WAbility, inventoryConsole, 1);
             DrawAbility(EAbility, inventoryConsole, 2);
             DrawAbility(RAbility, inventoryConsole, 3);
+            DrawAbility(AAbility, inventoryConsole, 4);
 
             inventoryConsole.Print(55, 1, "Items", Colors.Text);
             DrawItem(Item1, inventoryConsole, 0);
             DrawItem(Item2, inventoryConsole, 1);
             DrawItem(Item3, inventoryConsole, 2);
             DrawItem(Item4, inventoryConsole, 3);
+            DrawItem(Item5, inventoryConsole, 4);
         }
         private void DrawAbility(IAbility ability, RLConsole inventoryConsole, int position)
         {
@@ -133,6 +147,10 @@ namespace RoguelikeCL.Core
             else if (position == 3)
             {
                 letter = 'R';
+            }
+            else if (position == 4)
+            {
+                letter = 'A';
             }
 
             RLColor highlightTextColor = Palette.DbOldStone;

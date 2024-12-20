@@ -17,8 +17,16 @@ namespace RoguelikeCL.Equipment
             Speed = -2
          };
       }
-
-      public static HandEquipment Sword()
+      public static HandEquipment Staff()
+      {
+         return new HandEquipment{
+                Attack = 1,
+                AttackChance = 15,
+                Name = "Staff",
+                Speed = 0
+         };
+      }
+        public static HandEquipment Sword()
       {
          return new HandEquipment {
             Attack = 1,

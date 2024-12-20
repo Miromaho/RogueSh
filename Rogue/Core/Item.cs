@@ -12,7 +12,7 @@ namespace RoguelikeCL.Core
       public Item()
       {
          Symbol = '!';
-         Color = RLColor.Yellow;
+         Color = RLColor.LightBlue;
       }
 
       public string Name { get; protected set; }

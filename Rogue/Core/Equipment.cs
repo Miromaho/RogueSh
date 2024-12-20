@@ -12,7 +12,7 @@ namespace RoguelikeCL.Core
       public Equipment()
       {
          Symbol = ']';
-         Color = RLColor.Yellow;
+         Color = RLColor.Green;
       }
 
       public int Attack { get; set; }

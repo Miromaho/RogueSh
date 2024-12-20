@@ -15,8 +15,16 @@
             Name = "Leather"
          };
       }
-
-      public static BodyEquipment Chain()
+      public static BodyEquipment Fur()
+      {
+            return new BodyEquipment()
+            {
+                Defense = 1,
+                DefenseChance = 15,
+                Name = "Fur"
+            };
+      }
+        public static BodyEquipment Chain()
       {
          return new BodyEquipment() {
             Defense = 2,

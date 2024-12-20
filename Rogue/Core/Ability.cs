@@ -11,7 +11,7 @@ namespace RoguelikeCL.Core
       public Ability()
       {
          Symbol = '*';
-         Color = RLColor.Yellow;
+         Color = RLColor.Magenta;
       }
 
       public string Name { get; protected set; }

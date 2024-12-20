@@ -20,9 +20,12 @@ namespace RoguelikeCL.System
             equipmentPool.Add( HandEquipment.Sword(), 5 );
             equipmentPool.Add( HeadEquipment.Chain(), 5 );
             equipmentPool.Add( BodyEquipment.Chain(), 5 );
+            equipmentPool.Add( BodyEquipment.Fur(), 5);
          }
          else if ( level <= 6 )
          {
+            equipmentPool.Add(FeetEquipment.Fur(), 10);
+            equipmentPool.Add( HandEquipment.Staff(), 13);
             equipmentPool.Add( BodyEquipment.Chain(), 20 );
             equipmentPool.Add( HeadEquipment.Chain(), 20 );
             equipmentPool.Add( FeetEquipment.Chain(), 20 );

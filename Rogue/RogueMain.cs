@@ -14,15 +14,15 @@ namespace RogueMain
     {
 
         private static readonly int screenWidth = 100;
-        private static readonly int screenHeight = 70;
+        private static readonly int screenHeight = 100;
         private static RLRootConsole rootConsole;
 
         private static readonly int mapWidth = 80;
         private static readonly int mapHeight = 50;
         private static RLConsole mapConsole;
 
-        private static readonly int messageWidth = 80; //20
-        private static readonly int messageHeight = 11;//70
+        private static readonly int messageWidth = 80; 
+        private static readonly int messageHeight = 11;
         private static RLConsole messageConsole;
 
         private static readonly int statWidth = 20;
@@ -30,7 +30,7 @@ namespace RogueMain
         private static RLConsole statConsole;
 
         private static readonly int inventoryWidth = 80;
-        private static readonly int inventoryHeight = 11;
+        private static readonly int inventoryHeight = 13;
         private static RLConsole inventoryConsole;
 
         private static int mapLevel = 1;

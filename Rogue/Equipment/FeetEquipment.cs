@@ -15,8 +15,16 @@
             Name = "Leather"
          };
       }
-
-      public static FeetEquipment Chain()
+        public static FeetEquipment Fur()
+        {
+            return new FeetEquipment()
+            {
+                Defense = 1,
+                DefenseChance = 15,
+                Name = "Fur"
+            };
+        }
+        public static FeetEquipment Chain()
       {
          return new FeetEquipment() {
             Defense = 1,
