@@ -112,6 +112,7 @@ namespace RoguelikeCL.System
             return false;
         }
 
+        // Система нацеливания для одиночных абилок.
         private void HandleSelectableTargeting(RLKey key)
         {
             if (selectableTargets.Count != 0)

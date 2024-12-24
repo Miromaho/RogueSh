@@ -74,7 +74,6 @@ namespace RogueMain
             TargetingSys = new TargetingSys();
 
             Player.Item1 = new TeleportScroll();
-            Player.QAbility = new MagicMissile(15, 15, 100);
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
@@ -82,6 +81,9 @@ namespace RogueMain
             //Цвета консолей статов, сообщений и прочего для того чтобы точно видеть границу.
             //inventoryConsole.SetBackColor(0, 0, inventoryWidth, inventoryHeight, Palette.DbMetal);
             //inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
+
+            //БЕСПЛАТНО!!!!!!!!!!!!!!!!!!!!
+            Player.QAbility = new MagicMissile(10, 100, 100);
 
             rootConsole.Run();
         }
