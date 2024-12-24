@@ -4,17 +4,17 @@ using RogueMain;
 
 namespace RoguelikeCL.Abilities
 {
-    public class Heal : Ability
+    public class Regeneration : Ability
     {
         private readonly int amountToHeal;
 
-        public Heal(int AmountToHeal = 10, int cooldown = 60)
+        public Regeneration(int AmountToHeal = 1, int cooldown = 50, string name = "Regeneration")
         {
-            Name = "Heal Self";
+            Name = name;
             TurnsToRefresh = cooldown;
             TurnsUntilRefreshed = 0;
             amountToHeal = AmountToHeal;
-            Passive = false;
+            Passive = true;
         }
 
         protected override bool PerformAbility()

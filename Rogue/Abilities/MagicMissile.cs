@@ -18,6 +18,7 @@ namespace RoguelikeCL.Abilities
             TurnsUntilRefreshed = 0;
             attack = Attack;
             attackChance = AttackChance;
+            Passive = false;
         }
 
         protected override bool PerformAbility()
