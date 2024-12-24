@@ -84,7 +84,7 @@ namespace RogueMain
             //inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
             //БЕСПЛАТНО!!!!!!!!!!!!!!!!!!!!
-            //Player.QAbility = new Regeneration();
+            Player.QAbility = new Regeneration(1, 1);
 
             rootConsole.Run();
         }

@@ -117,7 +117,7 @@ namespace RoguelikeCL.System
         {
             if (selectableTargets.Count != 0)
             {
-                if (key == RLKey.A)
+                if (key == RLKey.S)
                 {
                     currentTargetIndex++;
                     if (currentTargetIndex >= selectableTargets.Count)
@@ -126,7 +126,7 @@ namespace RoguelikeCL.System
                     }
                     cursorPosition = selectableTargets[currentTargetIndex];
                 }
-                else if (key == RLKey.S)
+                else if (key == RLKey.D)
                 {
                     currentTargetIndex--;
                     if (currentTargetIndex < 0)

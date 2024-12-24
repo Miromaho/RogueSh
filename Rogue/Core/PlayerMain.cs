@@ -194,6 +194,7 @@ namespace RoguelikeCL.Core
             WAbility?.Tick();
             EAbility?.Tick();
             RAbility?.Tick();
+            AAbility?.Tick();
         }
     }
 }
