@@ -10,10 +10,10 @@ namespace RoguelikeCL.Abilities
         private readonly int attack;
         private readonly int attackChance;
 
-        public MagicMissile(int Attack, int AttackChance)
+        public MagicMissile(int Attack, int AttackChance, int Cooldown)
         {
             Name = "Magic Missile";
-            TurnsToRefresh = 10;
+            TurnsToRefresh = Cooldown;
             TurnsUntilRefreshed = 0;
             attack = Attack;
             attackChance = AttackChance;

@@ -6,6 +6,7 @@ using RoguelikeCL.System;
 using RogueSharp.Random;
 using RoguelikeCL.Items;
 using RoguelikeCl.Items;
+using RoguelikeCL.Abilities;
 
 namespace RogueMain
 {
@@ -73,6 +74,7 @@ namespace RogueMain
             TargetingSys = new TargetingSys();
 
             Player.Item1 = new TeleportScroll();
+            Player.QAbility = new MagicMissile(15, 15, 100);
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
@@ -88,6 +90,7 @@ namespace RogueMain
         private static void OnRootConsoleUpdate(object sender, UpdateEventArgs e)
         {
             bool didPlayerAct = false;
+            RogueGame.TargetingSys.Tick();
             RogueGame.Player.Tick();
             RLKeyPress keyPress = rootConsole.Keyboard.GetKeyPress();
             if (TargetingSys.IsPlayerTargeting)
