@@ -74,6 +74,7 @@ namespace RogueMain
             TargetingSys = new TargetingSys();
 
             Player.Item1 = new TeleportScroll();
+
             rootConsole.Update += OnRootConsoleUpdate;
 
             rootConsole.Render += OnRootConsoleRender;
@@ -83,7 +84,7 @@ namespace RogueMain
             //inventoryConsole.Print(1, 1, "Inventory", Colors.TextHeading);
 
             //БЕСПЛАТНО!!!!!!!!!!!!!!!!!!!!
-            Player.QAbility = new MagicMissile(10, 100, 100);
+            //Player.QAbility = new MagicMissile(10, 100, 100);
 
             rootConsole.Run();
         }

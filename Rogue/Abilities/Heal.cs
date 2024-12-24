@@ -8,10 +8,10 @@ namespace RoguelikeCL.Abilities
    {
       private readonly int amountToHeal;
 
-      public Heal( int AmountToHeal )
+      public Heal( int AmountToHeal = 10, int cooldown = 60 )
       {
          Name = "Heal Self";
-         TurnsToRefresh = 60;
+         TurnsToRefresh = cooldown;
          TurnsUntilRefreshed = 0;
          amountToHeal = AmountToHeal;
       }

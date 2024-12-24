@@ -4,11 +4,11 @@ using RogueMain;
 
 namespace RoguelikeCL.Items
 {
-   public class TeleportScroll : Item
+   public class EscapeScroll : Item
    {
-      public TeleportScroll()
+      public EscapeScroll()
       {
-         Name = "Teleport Scroll";
+         Name = "Escape Scroll";
          RemainingUses = 1;
       }
 
@@ -19,10 +19,8 @@ namespace RoguelikeCL.Items
 
          RogueGame.MessLogs.AddLine( $"{player.Name} uses a {Name} and reappears in another place" );
 
-         Point point = map.GetRandomLocation();
-            
-         
-         map.SetActorPosition( player, point.X, point.Y );
+
+         map.SetActorPosition( player, map.Rooms.Last().Center.X, map.Rooms.Last().Center.Y);
          
          RemainingUses--;
 
